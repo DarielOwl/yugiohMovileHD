@@ -1,0 +1,120 @@
+ul {
+    overflow: auto;
+    height: 85vh;
+}
+
+main {
+    flex: 1;
+}
+
+/* General */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  background-color: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Encabezado */
+header {
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+}
+
+/* Barra de búsqueda */
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  gap: 10px;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.search-bar button {
+  background-color: white;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Listado de cartas */
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.card-item {
+  background-color: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card-item img {
+  width: 50px;
+  height: 70px;
+  border-radius: 8px;
+  margin-right: 10px;
+}
+
+.card-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.card-count {
+  font-weight: bold;
+  background-color: #eee;
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+/* Navegación inferior */
+.bottom-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: white;
+  padding: 10px 0;
+  border-top: 1px solid #ddd;
+}
+
+.bottom-nav button {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 5px 15px;
+  border-radius: 10px;
+}
+
+.bottom-nav .active {
+  background-color: #007bff;
+  color: white;
+}
+
+/*--- Responsive Method ---*/
+@media screen and (max-width:480px) {
+    header, nav, main{
+        width: 100%;
+    }
+}
