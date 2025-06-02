@@ -1,13 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="/CardView/card.css">
+    <title>Yu-Gi-Oh - Card info</title>
 </head>
+
 <body>
-    <a href="../HomeView/index.html">
-        Volver
-    </a>
+    <main class="card-item">
+
+        <h1 class="card-name">Bystal Driuswurm</h1>
+        <img src="../imagenes/BystalDriuswurm.jpg" alt="card name" width="150px" height="200px">
+
+        <section class="card-description">
+                <p>
+                    Cantidad: 
+                    <span class="card-count"> 1 </span> 
+                </p> 
+                <p>
+                    Rareza: 
+                    <span class="card-count"> UR </span> 
+                </p> 
+                <p>
+                    Precio: 
+                    <span class="card-count"> $1000 </span> 
+                </p> 
+                <p>
+                    Pack: 
+                    <span class="card-count"> ABCD-EN001 </span> 
+                </p> 
+                
+        </section>
+    </main>
+
+    <!-- Menú de navegación inferior -->
+    <footer class="footer-menu">
+        <a id="add-card-btn" href="../AddView/add.html">➕</a>
+        <a id="home-btn" class="active" href="../HomeView/index.html">🏠</a>
+        <a id="banned-cards-btn" href="../ForbiddenView/forbidden.html">🚫</a>
+    </footer>
+
 </body>
+
 </html>

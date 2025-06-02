@@ -113,16 +113,21 @@ ul {
   padding: 10px 0;
 }
 
-.footer-menu button {
+.footer-menu a {
   background: none;
   border: none;
   font-size: 22px;
   cursor: pointer;
   padding: 5px 15px;
   border-radius: 10px;
+  text-decoration: none;
 }
 
-.footer-menu button:hover {
+.footer-menu a.active {
+  background-color: lightblue;
+}
+
+.footer-menu a:hover {
   background-color: rgb(32, 22, 172);
 }
 
