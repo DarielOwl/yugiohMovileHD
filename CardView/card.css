@@ -107,10 +107,6 @@ h1 {
     text-decoration: none;
 }
 
-.footer-menu a.active {
-    background-color: lightblue;
-}
-
 .footer-menu a:hover {
     background-color: rgb(32, 22, 172);
 }
