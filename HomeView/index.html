@@ -9,14 +9,16 @@
 </head>
 
 <body>
-    <main>
-        <!-- Barra de búsqueda con filtro -->
-        <section class="search-bar">
+    <!-- Barra de búsqueda con filtro -->
+    <section class="section-search">
+        <nav class="nav-search">
             <button id="filter-btn">🔽</button>
-            <input type="text" placeholder="Buscar carta" id="search-input">
+            <input type="text" placeholder="Buscar cualquier carta" id="search-input">
             <button id="search-btn">🔍</button>
-        </section>
+        </nav>
+    </section>
 
+    <main>
         <!-- Listado de cartas en stock -->
         <section class="card-list">
 
@@ -56,11 +58,11 @@
     </main>
 
     <!-- Menú de navegación inferior -->
-    <nav class="bottom-nav">
+    <footer class="footer-menu">
         <button id="add-card-btn">➕</button>
         <button id="home-btn" class="active">🏠</button>
         <button id="banned-cards-btn">🚫</button>
-    </nav>
+    </footer>
 </body>
 
 </html>

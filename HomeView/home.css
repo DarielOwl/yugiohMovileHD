@@ -1,12 +1,3 @@
-ul {
-    overflow: auto;
-    height: 85vh;
-}
-
-main {
-    flex: 1;
-}
-
 /* General */
 * {
   margin: 0;
@@ -15,48 +6,73 @@ main {
   font-family: sans-serif;
 }
 
-body {
-  background-color: #f6f6f6;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
-/* Encabezado */
+/* --- Encabezado de la pagina --- */
 header {
   text-align: center;
   padding: 10px;
   font-weight: bold;
 }
 
-/* Barra de búsqueda */
-.search-bar {
+/* --- Cuerpo de la pagina ---*/
+body {
+  background-color: hsl(0, 0%, 10%);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* --- Barra de búsqueda ---*/
+.section-search {
+  background-color: rgb(71, 71, 71);
+}
+
+.nav-search {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  gap: 10px;
+  justify-content: center;
+  background-color: #2d2d2d;
+  border-radius: 25px;
+  padding: 6px 12px;
+  max-width: 350px;
+  margin: 20px auto;
 }
 
-.search-bar input {
-  flex: 1;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-.search-bar button {
-  background-color: white;
+.nav-search #filter-btn,
+.nav-search #search-btn {
+  background: none;
   border: none;
+  color: white;
   font-size: 18px;
   cursor: pointer;
 }
 
-/* Listado de cartas */
+.nav-search #search-input {
+  text-align: center;
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 14px;
+  padding: 10px 16px;
+  margin: 0 8px;
+  outline: none;
+}
+
+/* --- Main de la Pagina ---*/
+main {
+  flex: 1;
+}
+
+/* --- Listado de cartas --- */
 .card-list {
   flex: 1;
   overflow-y: auto;
   padding: 10px;
+}
+
+ul {
+  overflow: auto;
+  height: 85vh;
 }
 
 .card-item {
@@ -66,7 +82,7 @@ header {
   align-items: center;
   padding: 8px;
   margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .card-item img {
@@ -88,17 +104,16 @@ header {
   border-radius: 8px;
 }
 
-/* Navegación inferior */
-.bottom-nav {
+/* --- Pie de Pagina ---*/
+.footer-menu {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: white;
+  background-color: rgb(0, 0, 0);
   padding: 10px 0;
-  border-top: 1px solid #ddd;
 }
 
-.bottom-nav button {
+.footer-menu button {
   background: none;
   border: none;
   font-size: 22px;
@@ -107,14 +122,16 @@ header {
   border-radius: 10px;
 }
 
-.bottom-nav .active {
-  background-color: #007bff;
-  color: white;
+.footer-menu button:hover {
+  background-color: rgb(32, 22, 172);
 }
 
-/*--- Responsive Method ---*/
+/* --- Responsive --- */
 @media screen and (max-width:480px) {
-    header, nav, main{
-        width: 100%;
-    }
+
+  header,
+  nav,
+  main {
+    width: 100%;
+  }
 }
