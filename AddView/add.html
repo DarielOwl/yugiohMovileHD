@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="add.css"> <!-- Puedes agregar tu CSS aquí -->
+    <title>Yu-Gi-Oh - Add Cards</title>
+</head>
+
+<body>
+    <!-- Barra de búsqueda con filtro -->
+    <section class="section-search">
+        <nav class="nav-search">
+            <button id="filter-btn">🔽</button>
+            <input type="text" placeholder="Buscar cualquier carta" id="search-input">
+            <button id="search-btn">🔍</button>
+        </nav>
+    </section>
+
+    <main>
+        <!-- Listado de cartas en stock -->
+        <section class="card-list">
+
+            <ul id="lista-cartas">
+                <!-- Cada carta -->
+              
+            </ul>
+        </section>
+    </main>
+
+    <!-- Menú de navegación inferior -->
+     <footer class="footer-menu">
+        <a id="add-card-btn" class="active" href="../AddView/add.html">➕</a>
+        <a id="home-btn" href="../HomeView/index.html">🏠</a>
+        <a id="banned-cards-btn" href="../ForbiddenView/forbidden.html">🚫</a>
+    </footer>
+
+    <script src="/AddView/add.js"></script>
+</body>
+
+</html>
