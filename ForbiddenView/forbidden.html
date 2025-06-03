@@ -13,45 +13,17 @@
     <section class="section-search">
         <nav class="nav-search">
             <button id="filter-btn">🔽</button>
+            <input type="text" placeholder="Buscar cualquier carta" id="search-input">
+            <button id="search-btn">🔍</button>
         </nav>
     </section>
 
+    <!-- Listado de cartas en stock -->
     <main>
-        <!-- Listado de cartas en stock -->
         <section class="card-list">
-
-            <ul>
-                <!-- Cada carta -->
-                <li>
-                    <div class="card-item">
-                        <a target="_self" href="../CardView/card.html">
-                            <img src="../imagenes/BystalDriuswurm.jpg" alt="card name">
-                        </a>
-                        <span class="card-name">Bystial Driuswurm</span>
-                        <span class="card-count">🚫</span>
-                    </div>
-                </li>
-                <li>
-                    <div class="card-item">
-                        <a target="_self" href="../CardView/card.html">
-                            <img src="../imagenes/BystalDriuswurm.jpg" alt="card name">
-                        </a>
-                        <span class="card-name">Bystial Driuswurm</span>
-                        <span class="card-count">1</span>
-                    </div>
-                </li>
-                <li>
-                    <div class="card-item">
-                        <a target="_self" href="../CardView/card.html">
-                            <img src="../imagenes/BystalDriuswurm.jpg" alt="card name">
-                        </a>
-                        <span class="card-name">Bystial Driuswurm</span>
-                        <span class="card-count">2</span>
-                    </div>
-                </li>
-
-
-            </ul>
+            <h2>Banlist TCG</h2>
+            <!-- Únicamente un <ul> para todo -->
+            <ul id="banlist"></ul>
         </section>
     </main>
 
@@ -61,6 +33,9 @@
         <a id="home-btn" href="../HomeView/index.html">🏠</a>
         <a id="banned-cards-btn" class="active" href="../ForbiddenView/forbidden.html">🚫</a>
     </footer>
+
+    <!-- Script para funcionalidad -->
+    <script src="/ForbiddenView/forbidden.js"></script>
 </body>
 
 </html>

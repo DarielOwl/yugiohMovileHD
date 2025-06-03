@@ -124,11 +124,11 @@ ul {
 }
 
 .footer-menu a.active {
-  background-color: lightblue;
+  background-color: rgb(64, 178, 216);
 }
 
 .footer-menu a:hover {
-  background-color: rgb(32, 22, 172);
+  background-color: rgb(255, 255, 255);
 }
 
 /* --- Responsive --- */
