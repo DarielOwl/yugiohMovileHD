@@ -48,11 +48,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             <div class="card-item">
                 <img
                 src="${card.card_images[0].image_url}"
-                alt="${card.card_name}"
+                alt="${card.name}"
                 width="60"
                 height="auto"
                 />
-                <span class="card-name">${card.card_name}</span>
+                <span class="card-name">${card.name}</span>
                 <span class="card-count">${symbol}</span>
             </div>
             `;
