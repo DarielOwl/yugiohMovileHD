@@ -80,3 +80,28 @@ export function obtenerCartasDelStock() {
 }
 
 
+export function eliminarCartaStock(id) {
+  return new Promise((resolve, reject) => {
+    if (!dbInstance) {
+      return reject(new Error('La base de datos no está abierta'));
+    }
+
+    const transaccion = dbInstance.transaction('yugiStock', 'readwrite');
+    const store = transaccion.objectStore('yugiStock');
+
+    const eliminar = store.delete(id);
+
+    eliminar.onsuccess = () => {
+      console.log(`Carta con ID ${id} eliminada del stock.`);
+      resolve();
+    };
+
+    eliminar.onerror = (ev) => {
+      console.error('Error al eliminar la carta:', ev.target.error);
+      reject(ev.target.error);
+    };
+  });
+}
+
+
+
