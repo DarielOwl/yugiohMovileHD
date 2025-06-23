@@ -1,80 +1,85 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    //Consultamos la Api de YGOPRO
-    try {
-        const respuesta = await fetch(
-            "https://db.ygoprodeck.com/api/v7/cardinfo.php?banlist=tcg"
-        );
+  try {
+    // 1) Fetch de la API
+    const respuesta = await fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?banlist=tcg");
+    if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
+    const json = await respuesta.json();
+    const cartas = json.data;
 
-        //Si no contesta un 200, sale error
-        if (!respuesta.ok) {
-            throw new Error(`HTTP ${respuesta.status}`);
-        }
+    // 2) Separar en Forbidden, Limited y Semi-Limited
+    const forbidden   = [];
+    const limited     = [];
+    const semilimited = [];
 
-        // Cada "json" es un array que tiene la info de la carta
-        const json = await respuesta.json();
-        const cartas = json.data;
+    cartas.forEach((carta) => {
+      const status = carta.banlist_info?.ban_tcg || "";
+      switch (status) {
+        case "Forbidden":
+          forbidden.push(carta);
+          break;
+        case "Limited":
+          limited.push(carta);
+          break;
+        case "Semi-Limited":
+          semilimited.push(carta);
+          break;
+      }
+    });
 
-        //Crear las listas para cada categoria de la Banlist
-        const forbidden = [];
-        const limited = [];
-        const semilimited = [];
+    // 3) Referencia al <ul> con overflow y altura fija
+    const ulBanlist = document.getElementById("banlist");
 
-        //Añadir a su respectiva lista
-        cartas.forEach((carta) => {
-            const status = carta.banlist_info?.ban_tcg || "";
-
-            switch (status) {
-                case "Forbidden":
-                    forbidden.push(carta);
-                    break;
-                case "Limited":
-                    limited.push(carta);
-                    break;
-                case "Semi-Limited":
-                case "Semi-Limited": //Nota: A veces el guion puede variar
-                    semilimited.push(carta);
-                    break;
-                default:
-                // si no coincide, lo ignoramos
-            }
-        });
-
-        //Crear un <li> dado el nombre, la imagen y el 'icono'
-        function makeListItem(card, symbol) {
-            // card.card_name  → nombre
-            // card.card_images[0].image_url → URL de la imagen
-            const li = document.createElement("li");
-            li.innerHTML = `
-            <div class="card-item">
-                <img
-                src="${card.card_images[0].image_url}"
-                alt="${card.card_name}"
-                width="60"
-                height="auto"
-                />
-                <span class="card-name">${card.card_name}</span>
-                <span class="card-count">${symbol}</span>
-            </div>
-            `;
-            return li;
-        }
-
-        // 4) Solo un <ul> en el DOM (La lista general)
-        const ulBanlist = document.getElementById("banlist");
-
-        // 5) Insertar en el siguiente orden: Forbidden → Limited → Semi-Limited
-        forbidden.forEach((c) => {
-            ulBanlist.appendChild(makeListItem(c, "🚫"));
-        });
-        limited.forEach((c) => {
-            ulBanlist.appendChild(makeListItem(c, "1"));
-        });
-        semilimited.forEach((c) => {
-            ulBanlist.appendChild(makeListItem(c, "2"));
-        });
-
-    } catch (err) {
-        console.error("Error fetching or parsing banlist:", err);
+    // 4) Creación de cada <li>
+    function makeListItem(card, symbol) {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <div class="card-item">
+          <img src="${card.card_images[0].image_url}" alt="${card.name}" />
+          <p>${card.name}</p>
+          <span class="symbol">${symbol}</span>
+        </div>
+      `;
+      return li;
     }
-});
 
+    // 5) Lista combinada
+    const combinedList = [
+      ...forbidden  .map(c => ({ card: c, symbol: "🚫" })),
+      ...limited    .map(c => ({ card: c, symbol: "1"  })),
+      ...semilimited.map(c => ({ card: c, symbol: "2"  })),
+    ];
+
+    // 6) Paginación
+    let currentIndex = 0;
+    const pageSize  = 20;
+
+    // 7) Renderizar siguiente lote
+    function renderNextBatch() {
+      const nextItems = combinedList.slice(currentIndex, currentIndex + pageSize);
+      nextItems.forEach(({ card, symbol }) => {
+        ulBanlist.appendChild(makeListItem(card, symbol));
+      });
+      currentIndex += nextItems.length;
+      if (currentIndex >= combinedList.length) {
+        ulBanlist.removeEventListener("scroll", onScroll);
+      }
+    }
+
+    // 8) Detección de scroll dentro del UL
+    function onScroll() {
+      if (
+        ulBanlist.scrollTop + ulBanlist.clientHeight
+        >= ulBanlist.scrollHeight - 100
+      ) {
+        renderNextBatch();
+      }
+    }
+
+    // 9) Carga inicial y listener en el UL
+    renderNextBatch();
+    ulBanlist.addEventListener("scroll", onScroll);
+
+  } catch (err) {
+    console.error("Error fetching or parsing banlist:", err);
+  }
+});
