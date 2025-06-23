@@ -9,7 +9,8 @@ async function obtenerTodasLasCartas() {
     nombre: carta.name,
     imagen: carta.card_images[0].image_url,
     packs: carta.card_sets,
-    precios: carta.card_prices
+    precios: carta.card_prices,
+    cantidad: 0
   }));
 }
 

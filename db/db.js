@@ -34,19 +34,31 @@ export function agregarCartaStock(carta) {
     if (!dbInstance) {
       return reject(new Error('La base de datos no está abierta'));
     }
-    // 1) Crear una transacción con permisos readwrite
+
     const transaccion = dbInstance.transaction('yugiStock', 'readwrite');
-    // 2) Obtener el objectStore
     const store = transaccion.objectStore('yugiStock');
-    // 3) “put” insertará o actualizará según exista ya la clave
-    const accion = store.put(carta);
 
-    accion.onsuccess = () => resolve();
-    accion.onerror = ev => reject(ev.target.error);
+    const obtenerCarta = store.get(carta.id);
 
-    // (La transacción se cierra sola cuando termina todo.)
+    obtenerCarta.onsuccess = () => {
+      const cartaExistente = obtenerCarta.result;
+
+      const cartaActualizada = {
+        ...carta,
+        cantidad: cartaExistente ? cartaExistente.cantidad + 1 : 1
+      };
+
+      const accion = store.put(cartaActualizada);
+      console.log("Carta actualizada:", cartaActualizada);
+
+      accion.onsuccess = () => resolve();
+      accion.onerror = ev => reject(ev.target.error);
+    };
+
+    obtenerCarta.onerror = ev => reject(ev.target.error);
   });
 }
+
 
 export function obtenerCartasDelStock() {
   return new Promise((resolve, reject) => {
