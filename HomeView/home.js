@@ -1,7 +1,7 @@
 // Importar funciones desde db.js
 import {
   abrirConexionDB,
-  eliminarCartaStock,
+  eliminarCantidadCartaStock,
   obtenerCartasDelStock
 } from '../db/db.js';
 
@@ -10,6 +10,21 @@ let cartas = [];
 let currentIndex = 0;
 const pageSize = 20;
 const threshold = 100;
+
+async function recargarLista() {
+  ul.innerHTML = "";
+  ul.removeEventListener("scroll", onScroll);
+  ul.scrollTop = 0;
+
+  cartas = await obtenerCartasDelStock();
+
+  // Reiniciar index al completo y volver a enganchar scroll y render
+  currentIndex = 0;
+  renderNextBatch();
+  ul.addEventListener("scroll", onScroll);
+}
+
+
 
 // Crea un <li> representando una carta
 function makeListItem(carta) {
@@ -27,9 +42,10 @@ function makeListItem(carta) {
 
   li.querySelector(".btn-eliminar").addEventListener("click", async () => {
     try {
-      await eliminarCartaStock(carta.id);
+      await eliminarCantidadCartaStock(carta);
       console.log(`Carta "${carta.nombre}" eliminada del stock`);
-      li.remove(); // Elimina visualmente
+       // Volvemos a renderizar todo desde cero
+      await recargarLista();
     } catch (err) {
       console.error("Error eliminando en IndexedDB:", err);
     }

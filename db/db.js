@@ -80,6 +80,56 @@ export function obtenerCartasDelStock() {
 }
 
 
+export function eliminarCantidadCartaStock(carta) {
+  return new Promise((resolve, reject) => {
+    if (!dbInstance) {
+      return reject(new Error('La base de datos no está abierta'));
+    }
+
+    const transaccion = dbInstance.transaction('yugiStock', 'readwrite');
+    const store = transaccion.objectStore('yugiStock');
+
+    const obtenerCarta = store.get(carta.id);
+
+    obtenerCarta.onsuccess = () => {
+      const cartaExistente = obtenerCarta.result;
+      let cartaActualizada = {};
+      if (cartaExistente.cantidad > 1) {
+        cartaActualizada = {
+          ...carta,
+          cantidad: cartaExistente ? cartaExistente.cantidad - 1 : 1
+        };
+
+        const accion = store.put(cartaActualizada);
+        console.log("Carta actualizada:", cartaActualizada);
+
+        accion.onsuccess = () => resolve();
+        accion.onerror = ev => reject(ev.target.error);
+      } else {
+
+        // Corregido: se espera a que termine la eliminación
+        const eliminarAccion = store.delete(cartaExistente.id);
+
+        eliminarAccion.onsuccess = () => {
+          console.log(`Carta con ID ${cartaExistente.id} eliminada del stock.`);
+          resolve();
+        };
+
+        eliminarAccion.onerror = (ev) => {
+          console.error('Error al eliminar la carta:', ev.target.error);
+          reject(ev.target.error);
+        };
+      }
+
+    };
+
+    obtenerCarta.onerror = ev => reject(ev.target.error);
+  });
+}
+
+
+
+
 export function eliminarCartaStock(id) {
   return new Promise((resolve, reject) => {
     if (!dbInstance) {
