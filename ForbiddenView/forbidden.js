@@ -75,8 +75,48 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
 
+
+function buscarCartaPorNombre() {
+  document.getElementById('search-btn').addEventListener('click', function () {
+    const nombre = document.getElementById('search-input').value.trim().toLowerCase();
+    const ulContenedor = document.getElementById('banlist');
+    ulContenedor.textContent = ''; // limpiar resultado previo
+
+    if (!nombre) {
+      ulContenedor.textContent = 'Por favor, ingresa un nombre.';
+      return;
+    }
+
+    // Buscar en la lista local
+    const resultados = combinedList.filter(({ card }) =>
+      card.name.toLowerCase().includes(nombre)
+    );
+
+    if (resultados.length === 0) {
+      ulContenedor.textContent = 'No se encontraron resultados.';
+      return;
+    }
+
+    // Mostrar los resultados
+    resultados.forEach(({ card, symbol }) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <div class="card-item">
+          <img src="${card.card_images[0].image_url}" alt="${card.name}" />
+          <p>${card.name}</p>
+          <span class="symbol">${symbol}</span>
+        </div>
+      `;
+      ulContenedor.appendChild(li);
+    });
+  });
+}
+
+
+
     // 9) Carga inicial y listener en el UL
     renderNextBatch();
+    buscarCartaPorNombre();
     ulBanlist.addEventListener("scroll", onScroll);
 
   } catch (err) {
