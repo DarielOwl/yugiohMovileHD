@@ -1,4 +1,5 @@
 import { abrirConexionDB, agregarCartaStock } from '../db/db.js';
+import { initFilterPanel } from '../Helper/filter.js';
 
 async function obtenerTodasLasCartas() {
   const response = await fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php");
@@ -7,6 +8,8 @@ async function obtenerTodasLasCartas() {
   return data.data.map(carta => ({
     id: carta.id,
     nombre: carta.name,
+    card_type: carta.card_type,   // ← aquí
+    type: carta.type,        // ← y aquí
     imagen: carta.card_images[0].image_url,
     packs: carta.card_sets,
     precios: carta.card_prices,
@@ -131,8 +134,19 @@ async function createAndConfigureCardList() {
     buscarCartaPorNombre();
     ul = document.getElementById("lista-cartas");
     cartas = await obtenerTodasLasCartas();
-    currentIndex = 0;
 
+    // === Inicializamos el panel de filtros ===
+    initFilterPanel({
+      filterBtnSelector: '#filter-btn',
+      listSelector: '#lista-cartas',
+      getAllCards: obtenerTodasLasCartas,
+      renderCards: cards => {
+        ul.innerHTML = '';
+        cards.forEach(c => ul.appendChild(makeListItem(c)));
+      }
+    });
+
+    currentIndex = 0;
     renderNextBatch();
     ul.addEventListener("scroll", onScroll);
 
@@ -140,7 +154,6 @@ async function createAndConfigureCardList() {
     console.error("Error al inicializar la lista de cartas:", err);
   }
 }
-
 
 // Ejecuta cuando el DOM está listo
 window.addEventListener("DOMContentLoaded", createAndConfigureCardList);

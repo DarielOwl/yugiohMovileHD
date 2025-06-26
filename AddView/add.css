@@ -4,3 +4,59 @@
 ul {
   height: 81vh;
 }
+
+/* Panel lateral */
+#filter-panel {
+  position: fixed;
+  top: 0; left: -280px;
+  width: 280px; height: 100vh;
+  background: #222; color: #fff;
+  padding: 1rem;
+  transition: left .3s;
+  overflow-y: auto;
+  z-index: 1000;
+}
+#filter-panel.open {
+  left: 0;
+}
+/* Cabecera y botón de cerrar */
+#filter-panel h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+#filter-panel #close-filters {
+  cursor: pointer;
+  font-size: 1.3rem;
+}
+/* Grupos de filtros */
+.filter-group {
+  margin-bottom: 1.5rem;
+}
+.filter-group h3 {
+  margin-bottom: .5rem;
+  text-transform: uppercase;
+  font-size: .9rem;
+}
+.filter-group .buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+/* Botones de filtro */
+.filter-btn {
+  background: #444;
+  border: none;
+  border-radius: 20px;
+  padding: .3rem .8rem;
+  cursor: pointer;
+  color: #ddd;
+  font-size: .85rem;
+  transition: 2s;
+}
+.filter-btn.active {
+  background: orange;
+  color: #fff;
+}
