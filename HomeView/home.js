@@ -11,6 +11,13 @@ let currentIndex = 0;
 const pageSize = 20;
 const threshold = 100;
 
+if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('../service_worker.js')
+        .then(reg => console.log('Registro del SW exitoso', reg))
+        .catch(err => console.warn('Error al tratar de registrar el SW', err))
+}
+
+
 async function recargarLista() {
   ul.innerHTML = "";
   ul.removeEventListener("scroll", onScroll);
