@@ -1,5 +1,4 @@
 import { abrirConexionDB, agregarCartaStock } from '../db/db.js';
-import { initFilterPanel } from '../Helper/filter.js';
 
 async function obtenerTodasLasCartas() {
   const response = await fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php");
@@ -8,12 +7,18 @@ async function obtenerTodasLasCartas() {
   return data.data.map(carta => ({
     id: carta.id,
     nombre: carta.name,
-    card_type: carta.card_type,   // ← aquí
-    type: carta.type,        // ← y aquí
     imagen: carta.card_images[0].image_url,
     packs: carta.card_sets,
     precios: carta.card_prices,
-    cantidad: 0
+    cantidad: 0,
+    type: carta.type,  // <-- tipo original API
+    cardType: carta.type.includes("Monster")
+      ? "Monster"
+      : carta.type.includes("Spell")
+        ? "Spell"
+        : carta.type.includes("Trap")
+          ? "Trap"
+          : "Other"
   }));
 }
 
@@ -21,6 +26,7 @@ let ul;
 let cartas = [];
 
 let currentIndex = 0;
+let filteredCartas = [];    // → aquí irá el resultado del filtro
 const pageSize = 20;
 const threshold = 100; // px antes de llegar al fondo para disparar carga
 
@@ -50,13 +56,23 @@ function makeListItem(carta) {
 
 // Renderiza el siguiente lote de cartas
 function renderNextBatch() {
-  const batch = cartas.slice(currentIndex, currentIndex + pageSize);
+  const batch = filteredCartas.slice(currentIndex, currentIndex + pageSize);
   batch.forEach(carta => ul.appendChild(makeListItem(carta)));
   currentIndex += batch.length;
-  if (currentIndex >= cartas.length) {
+  if (currentIndex >= filteredCartas.length) {
     ul.removeEventListener("scroll", onScroll);
   }
 }
+
+// function renderNextBatchFilterList() {
+//   const batch = filteredCartas.slice(currentIndex, currentIndex + pageSize);
+//   batch.forEach(carta => ul.appendChild(makeListItem(carta)));
+//   currentIndex += batch.length;
+//   if (currentIndex >= filteredCartas.length) {
+//     ul.removeEventListener("scroll", onScroll);
+//   }
+// }
+
 
 // Al hacer scroll dentro del UL, carga cuando estamos cerca del final
 function onScroll() {
@@ -132,28 +148,59 @@ async function createAndConfigureCardList() {
   try {
     await abrirConexionDB();
     buscarCartaPorNombre();
+
     ul = document.getElementById("lista-cartas");
     cartas = await obtenerTodasLasCartas();
-
-    // === Inicializamos el panel de filtros ===
-    initFilterPanel({
-      filterBtnSelector: '#filter-btn',
-      listSelector: '#lista-cartas',
-      getAllCards: obtenerTodasLasCartas,
-      renderCards: cards => {
-        ul.innerHTML = '';
-        cards.forEach(c => ul.appendChild(makeListItem(c)));
-      }
-    });
-
+    // AL PRINCIPIO no hay filtros ⇒ muestro todo
+    filteredCartas = cartas;
     currentIndex = 0;
     renderNextBatch();
     ul.addEventListener("scroll", onScroll);
+
+    // inicializa listeners de filtro
+    setupFilters();
 
   } catch (err) {
     console.error("Error al inicializar la lista de cartas:", err);
   }
 }
+
+// ► Función que aplica el filtro y reinicia la paginación
+function applyFilters() {
+  const sel = Array.from(document.querySelectorAll('.filter-checkbox'))
+    .filter(cb => cb.checked)
+    .map(cb => cb.value);
+  // reset
+  ul.textContent = '';
+  currentIndex = 0;
+  // decide fuente de datos
+  filteredCartas = sel.length
+    ? cartas.filter(c => sel.includes(c.cardType))
+    : cartas;
+  // vuelve a enganchar scroll y renderiza
+  ul.removeEventListener("scroll", onScroll);
+  ul.addEventListener("scroll", onScroll);
+  renderNextBatch();
+}
+
+// ► Asocia evento change a cada checkbox
+function setupFilters() {
+  document.querySelectorAll('.filter-checkbox')
+    .forEach(cb => cb.addEventListener('change', applyFilters));
+}
+
+// ► Toggle del panel al pulsar el botón
+const filterBtn = document.getElementById('filter-btn');
+filterBtn.addEventListener('click', () => {
+  document.body.classList.toggle('filter-open');
+});
+
+// al final de tu setup de JS, tras el toggle del filtro...
+const closeBtn = document.getElementById('filter-close-btn');
+closeBtn.addEventListener('click', () => {
+  document.body.classList.remove('filter-open');
+});
+
 
 // Ejecuta cuando el DOM está listo
 window.addEventListener("DOMContentLoaded", createAndConfigureCardList);

@@ -18,13 +18,20 @@
         </nav>
     </section>
 
+    <aside id="filter-panel">
+        <!-- ↓ BOTÓN PARA CERRAR EL PANEL -->
+        <button id="filter-close-btn" aria-label="Cerrar filtros">← Atrás</button>
+        
+        <h3>Filtros</h3>
+        <label><input type="checkbox" value="Monster" class="filter-checkbox"> Monstruo</label><br>
+        <label><input type="checkbox" value="Spell" class="filter-checkbox"> Hechizo</label><br>
+        <label><input type="checkbox" value="Trap" class="filter-checkbox"> Trampa</label>
+    </aside>
+
     <main>
         <!-- Listado de cartas en stock -->
         <section class="card-list">
-
-            <ul id="lista-cartas">
-                <!-- Cada carta -->
-            </ul>
+            <ul id="lista-cartas"></ul>
         </section>
     </main>
 
