@@ -1,3 +1,4 @@
+import { initFilterModule, renderNextBatch, onScroll } from '../Helper/filters.js';
 import { abrirConexionDB, agregarCartaStock } from '../db/db.js';
 
 async function obtenerTodasLasCartas() {
@@ -25,10 +26,10 @@ async function obtenerTodasLasCartas() {
 let ul;
 let cartas = [];
 
-let currentIndex = 0;
-let filteredCartas = [];    // → aquí irá el resultado del filtro
-const pageSize = 20;
-const threshold = 100; // px antes de llegar al fondo para disparar carga
+// let currentIndex = 0;
+// let filteredCartas = [];    // → aquí irá el resultado del filtro
+// const pageSize = 20;
+// const threshold = 100; // px antes de llegar al fondo para disparar carga
 
 // Crea un <li> y le agrega el listener al botón
 function makeListItem(carta) {
@@ -55,14 +56,14 @@ function makeListItem(carta) {
 }
 
 // Renderiza el siguiente lote de cartas
-function renderNextBatch() {
-  const batch = filteredCartas.slice(currentIndex, currentIndex + pageSize);
-  batch.forEach(carta => ul.appendChild(makeListItem(carta)));
-  currentIndex += batch.length;
-  if (currentIndex >= filteredCartas.length) {
-    ul.removeEventListener("scroll", onScroll);
-  }
-}
+// function renderNextBatch() {
+//   const batch = filteredCartas.slice(currentIndex, currentIndex + pageSize);
+//   batch.forEach(carta => ul.appendChild(makeListItem(carta)));
+//   currentIndex += batch.length;
+//   if (currentIndex >= filteredCartas.length) {
+//     ul.removeEventListener("scroll", onScroll);
+//   }
+// }
 
 // function renderNextBatchFilterList() {
 //   const batch = filteredCartas.slice(currentIndex, currentIndex + pageSize);
@@ -75,11 +76,11 @@ function renderNextBatch() {
 
 
 // Al hacer scroll dentro del UL, carga cuando estamos cerca del final
-function onScroll() {
-  if (ul.scrollTop + ul.clientHeight >= ul.scrollHeight - threshold) {
-    renderNextBatch();
-  }
-}
+// function onScroll() {
+//   if (ul.scrollTop + ul.clientHeight >= ul.scrollHeight - threshold) {
+//     renderNextBatch();
+//   }
+// }
 
 function buscarCartaPorNombre() {
   document.getElementById('search-btn').addEventListener('click', function () {
@@ -149,16 +150,15 @@ async function createAndConfigureCardList() {
     await abrirConexionDB();
     buscarCartaPorNombre();
 
-    ul = document.getElementById("lista-cartas");
-    cartas = await obtenerTodasLasCartas();
-    // AL PRINCIPIO no hay filtros ⇒ muestro todo
-    filteredCartas = cartas;
-    currentIndex = 0;
+    const ul = document.getElementById("lista-cartas");
+    const cartas = await obtenerTodasLasCartas();
+
+    // --- inicializa filtros + panel ---
+    initFilterModule(cartas, ul, makeListItem);
+
+    // --- render y scroll tal como antes ---
     renderNextBatch();
     ul.addEventListener("scroll", onScroll);
-
-    // inicializa listeners de filtro
-    setupFilters();
 
   } catch (err) {
     console.error("Error al inicializar la lista de cartas:", err);
@@ -166,40 +166,40 @@ async function createAndConfigureCardList() {
 }
 
 // ► Función que aplica el filtro y reinicia la paginación
-function applyFilters() {
-  const sel = Array.from(document.querySelectorAll('.filter-checkbox'))
-    .filter(cb => cb.checked)
-    .map(cb => cb.value);
-  // reset
-  ul.textContent = '';
-  currentIndex = 0;
-  // decide fuente de datos
-  filteredCartas = sel.length
-    ? cartas.filter(c => sel.includes(c.cardType))
-    : cartas;
-  // vuelve a enganchar scroll y renderiza
-  ul.removeEventListener("scroll", onScroll);
-  ul.addEventListener("scroll", onScroll);
-  renderNextBatch();
-}
+// function applyFilters() {
+//   const sel = Array.from(document.querySelectorAll('.filter-checkbox'))
+//     .filter(cb => cb.checked)
+//     .map(cb => cb.value);
+//   // reset
+//   ul.textContent = '';
+//   currentIndex = 0;
+//   // decide fuente de datos
+//   filteredCartas = sel.length
+//     ? cartas.filter(c => sel.includes(c.cardType))
+//     : cartas;
+//   // vuelve a enganchar scroll y renderiza
+//   ul.removeEventListener("scroll", onScroll);
+//   ul.addEventListener("scroll", onScroll);
+//   renderNextBatch();
+// }
 
 // ► Asocia evento change a cada checkbox
-function setupFilters() {
-  document.querySelectorAll('.filter-checkbox')
-    .forEach(cb => cb.addEventListener('change', applyFilters));
-}
+// function setupFilters() {
+//   document.querySelectorAll('.filter-checkbox')
+//     .forEach(cb => cb.addEventListener('change', applyFilters));
+// }
 
 // ► Toggle del panel al pulsar el botón
-const filterBtn = document.getElementById('filter-btn');
-filterBtn.addEventListener('click', () => {
-  document.body.classList.toggle('filter-open');
-});
+// const filterBtn = document.getElementById('filter-btn');
+// filterBtn.addEventListener('click', () => {
+//   document.body.classList.toggle('filter-open');
+// });
 
 // al final de tu setup de JS, tras el toggle del filtro...
-const closeBtn = document.getElementById('filter-close-btn');
-closeBtn.addEventListener('click', () => {
-  document.body.classList.remove('filter-open');
-});
+// const closeBtn = document.getElementById('filter-close-btn');
+// closeBtn.addEventListener('click', () => {
+//   document.body.classList.remove('filter-open');
+// });
 
 
 // Ejecuta cuando el DOM está listo
