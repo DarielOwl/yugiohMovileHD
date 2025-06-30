@@ -111,7 +111,21 @@ h1 {
     background-color: rgb(32, 22, 172);
 }
 
+.rareza-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 10px 20px;
+}
 
+.rareza-item {
+    background-color: #ddd;
+    color: #222;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+}
 
 /* --- Responsive --- */
 @media screen and (max-width:480px) {

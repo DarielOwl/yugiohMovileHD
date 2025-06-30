@@ -72,7 +72,7 @@ main {
 
 ul {
   overflow: auto;
-  height: 73vh;
+  height: 65vh;
 }
 
 .card-item {
@@ -129,6 +129,20 @@ ul {
 
 .footer-menu a:hover {
   background-color: rgb(255, 255, 255);
+}
+
+#mensaje-eliminado {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #af4c4c;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
 }
 
 /* --- Responsive --- */

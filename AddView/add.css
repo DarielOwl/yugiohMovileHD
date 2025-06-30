@@ -2,5 +2,19 @@
 @import url('/HomeView/home.css');
 
 ul {
-  height: 81vh;
+  height: 65vh;
+}
+
+#mensaje-agregado {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
 }

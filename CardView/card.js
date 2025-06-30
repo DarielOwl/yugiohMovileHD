@@ -18,18 +18,17 @@ function cargarDetalleCarta() {
           <img src="${carta.card_images[0].image_url}" alt="card name" width="150px" height="200px" id="card-image">
         `;
 
+        const rarezasHTML = carta.card_sets?.map(set => {
+          const precio = parseFloat(set.set_price) === 0 ? 'Out of stock' : `$${set.set_price}`;
+          return `<div class="rareza-item">${set.set_code} - ${set.set_rarity} - ${precio}</div>`;
+        }).join('') ?? '<div class="rareza-item">No disponible</div>';
+
         descripcion.innerHTML = `
-          <p>
-            Rareza: 
-            <span class="card-count"> ${
-                carta.card_sets?.map(set => set.set_rarity).join(' | ')
-            } </span> 
-          </p> 
-          <p>
-            Precio: 
-            <span class="card-count"> USD $${carta.card_prices[0]?.tcgplayer_price} </span> 
-          </p> 
-        `;
+  <p>Rarezas disponibles:</p>
+  <div class="rareza-container">${rarezasHTML}</div>
+  
+`;
+
       })
       .catch(err => {
         contenedor.innerHTML = `<p>Error al cargar los datos de la carta.</p>`;
