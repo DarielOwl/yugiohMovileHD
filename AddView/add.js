@@ -18,11 +18,11 @@ async function obtenerTodasLasCartas() {
 function mostrarMensajeAgregado(texto = "Carta agregada al stock") {
   const mensaje = document.getElementById("mensaje-agregado");
   mensaje.textContent = texto;
-  mensaje.style.display = "block";
+  mensaje.classList.add("mostrar");
 
   setTimeout(() => {
-    mensaje.style.display = "none";
-  }, 2000); // Ocultar después de 2 segundos
+    mensaje.classList.remove("mostrar");
+  }, 5000); // Ocultar después de 5 segundos
 }
 
 
@@ -122,7 +122,7 @@ function buscarCartaPorNombre() {
                 precios: carta.card_prices,
                 cantidad: 0
               });
-              mostrarMensajeAgregado(`"${carta.nombre}" agregada al stock`);
+              mostrarMensajeAgregado(`"${carta.name}" agregada al stock`);
               console.log(`Carta "${carta.name}" agregada al stock`);
             } catch (err) {
               console.error("Error guardando en IndexedDB:", err);

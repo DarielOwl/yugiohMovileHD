@@ -9,11 +9,11 @@ import {
 function mostrarMensajeEliminado(texto = "Carta eliminada del stock") {
   const mensaje = document.getElementById("mensaje-eliminado");
   mensaje.textContent = texto;
-  mensaje.style.display = "block";
+  mensaje.classList.add("mostrar");
 
   setTimeout(() => {
-    mensaje.style.display = "none";
-  }, 2000); // Ocultar después de 2 segundos
+    mensaje.classList.remove("mostrar");
+  }, 5000); // Ocultar después de 5 segundos
 }
 
 
@@ -134,7 +134,7 @@ function buscarCartaPorNombre() {
                 precios: carta.card_prices,
                 cantidad: 0
               });
-              mostrarMensajeEliminado(`Carta "${carta.nombre}" eliminada del stock`);
+              mostrarMensajeEliminado(`Carta "${carta.name}" eliminada del stock`);
               console.log(`Carta "${carta.name}" agregada al stock`);
             } catch (err) {
               console.error("Error guardando en IndexedDB:", err);

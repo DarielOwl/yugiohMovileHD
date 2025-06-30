@@ -3,11 +3,11 @@ function cargarDetalleCarta() {
   const nombre = params.get("nombre");
 
   if (nombre) {
-    const contenedor = document.getElementById("card-name");
+    //const contenedor = document.getElementById("card-name");
     const descripcion = document.getElementById("card-description");
     const imagen = document.getElementById("card-image");
 
-    contenedor.innerHTML = `<h2>${nombre}</h2>`;
+    //contenedor.innerHTML = `<h2>${nombre}</h2>`;
 
     fetch(`https://db.ygoprodeck.com/api/v7/cardinfo.php?name=${encodeURIComponent(nombre)}`)
       .then(res => res.json())
@@ -20,7 +20,14 @@ function cargarDetalleCarta() {
 
         const rarezasHTML = carta.card_sets?.map(set => {
           const precio = parseFloat(set.set_price) === 0 ? 'Out of stock' : `$${set.set_price}`;
-          return `<div class="rareza-item">${set.set_code} - ${set.set_rarity} - ${precio}</div>`;
+          return `
+    <div class="rareza-item">
+      <div><strong>Nombre:</strong> ${set.set_name}</div>
+      <div><strong>Código:</strong> ${set.set_code}</div>
+      <div><strong>Rareza:</strong> ${set.set_rarity}</div>
+      <div><strong>Precio:</strong> ${precio}</div>
+    </div>
+  `;
         }).join('') ?? '<div class="rareza-item">No disponible</div>';
 
         descripcion.innerHTML = `
