@@ -20,8 +20,13 @@ export function initFilterModule(allCards, ul, makeLI) {
   // toggle panel
   document.getElementById('filter-btn')
     .addEventListener('click', () => document.body.classList.toggle('filter-open'));
+
   document.getElementById('filter-close-btn')
     .addEventListener('click', () => document.body.classList.remove('filter-open'));
+
+  // ——— nuevo listener para limpiar
+  document.getElementById('clear-filters-btn')
+    .addEventListener('click', clearFilters);
 
   // categoría → radio buttons
   document.querySelectorAll('.category-radio')
@@ -85,6 +90,34 @@ function onCategoryChange() {
   // aplica filtro (solo por categoría por ahora)
   applyFilters();
 }
+
+function clearFilters() {
+  // 1) Desmarcar radios de categoría
+  document.querySelectorAll('input[name="category"]')
+          .forEach(r => r.checked = false);
+
+  // 2) Desmarcar y deshabilitar todos los subtipo-checkbox
+  ['spell', 'trap', 'monster'].forEach(cat => {
+    document.querySelectorAll(`.${cat}-checkbox`)
+      .forEach(cb => {
+        cb.checked  = false;
+        cb.disabled = true;
+      });
+  });
+
+  // 3) Cerrar panel (opcional)
+  //document.body.classList.remove('filter-open');
+
+  // 4) Volver al listado original
+  ulElem.textContent = '';
+  currentIndex = 0;
+  filteredCartas = cartas;
+
+  ulElem.removeEventListener('scroll', onScroll);
+  ulElem.addEventListener('scroll', onScroll);
+  renderNextBatch();
+}
+
 
 /** Aplica filtros (categoría + subtipos) */
 function applyFilters() {

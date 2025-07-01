@@ -39,4 +39,20 @@ body.filter-open .card-list {
   border: none;
   font-size: 1rem;
   cursor: pointer;
+
+  background: rgb(0, 0, 0);
+  border-radius: 1cm;
+  color: white;
+}
+
+#filter-panel #clear-filters-btn {
+  display: block;
+  margin-bottom: 1rem;
+  padding: 0.25rem 0.5rem;
+  background: rgb(0, 0, 0);
+  border-radius: 1cm;
+  font-size: 1rem;
+  cursor: pointer;
+  color: white;
+  border: none;
 }
