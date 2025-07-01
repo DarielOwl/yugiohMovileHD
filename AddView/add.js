@@ -12,7 +12,8 @@ async function obtenerTodasLasCartas() {
     packs: carta.card_sets,
     precios: carta.card_prices,
     cantidad: 0,
-    type: carta.type,  // <-- tipo original API
+    type: carta.type,
+    humanReadableCardType: carta.humanReadableCardType,
     cardType: carta.type.includes("Monster")
       ? "Monster"
       : carta.type.includes("Spell")
