@@ -14,6 +14,20 @@ async function obtenerTodasLasCartas() {
   }));
 }
 
+
+function mostrarMensajeAgregado(texto = "Carta agregada al stock") {
+  const mensaje = document.getElementById("mensaje-agregado");
+  mensaje.textContent = texto;
+  mensaje.classList.add("mostrar");
+
+  setTimeout(() => {
+    mensaje.classList.remove("mostrar");
+  }, 5000); // Ocultar después de 5 segundos
+}
+
+
+
+
 let ul;
 let cartas = [];
 
@@ -37,6 +51,7 @@ function makeListItem(carta) {
   li.querySelector(".card-count").addEventListener("click", async () => {
     try {
       await agregarCartaStock(carta);
+      mostrarMensajeAgregado(`"${carta.nombre}" agregada al stock`);
       console.log(`Carta "${carta.nombre}" agregada al stock`);
     } catch (err) {
       console.error("Error guardando en IndexedDB:", err);
@@ -107,6 +122,7 @@ function buscarCartaPorNombre() {
                 precios: carta.card_prices,
                 cantidad: 0
               });
+              mostrarMensajeAgregado(`"${carta.name}" agregada al stock`);
               console.log(`Carta "${carta.name}" agregada al stock`);
             } catch (err) {
               console.error("Error guardando en IndexedDB:", err);

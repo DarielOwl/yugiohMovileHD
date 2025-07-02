@@ -1,0 +1,21 @@
+{
+  "name": "Yugioh Movile HD",
+  "short_name": "YugiohMovileHD",
+  "scope": "./",
+  "start_url": "./HomeView/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2196f3",
+  "icons": [
+    {
+      "src": "imagenes/icons/icon_256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "imagenes/icons/icon_512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
