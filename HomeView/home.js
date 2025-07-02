@@ -1,3 +1,6 @@
+import { initFilterModule, renderNextBatch, onScroll }
+  from '../Helper/filters.js';
+
 // Importar funciones desde db.js
 import {
   abrirConexionDB,
@@ -8,66 +11,86 @@ import {
 let ul;
 let cartas = [];
 let currentIndex = 0;
-const pageSize = 20;
-const threshold = 100;
+// const ul = document.getElementById("lista-cartas");
+// const stored = await obtenerCartasDelStock();
+// const cardsForFilter = stored.map(c => ({
+//   id: c.id,
+//   name: c.nombre,
+//   cantidad: c.cantidad,
+//   humanReadableCardType: c.humanReadableCardType,
+//   cardType: c.cardType,
+//   card_images: [{ image_url: c.imagen }]
+// }));
 
-async function recargarLista() {
-  ul.innerHTML = "";
-  ul.removeEventListener("scroll", onScroll);
-  ul.scrollTop = 0;
 
-  cartas = await obtenerCartasDelStock();
+// const pageSize = 20;
+// const threshold = 100;
 
-  // Reiniciar index al completo y volver a enganchar scroll y render
-  currentIndex = 0;
-  renderNextBatch();
-  ul.addEventListener("scroll", onScroll);
-}
+// async function recargarLista() {
+//   ul.innerHTML = "";
+//   ul.removeEventListener("scroll", onScroll);
+//   ul.scrollTop = 0;
+
+//   cartas = await obtenerCartasDelStock();
+
+//   // Reiniciar index al completo y volver a enganchar scroll y render
+//   currentIndex = 0;
+//   renderNextBatch();
+//   ul.addEventListener("scroll", onScroll);
+// }
 
 // Crea un <li> representando una carta
-function makeListItem(carta) {
-  const li = document.createElement("li");
+function makeListItem(card) {
+  const li = document.createElement('li');
   li.innerHTML = `
     <div class="card-item">
-      <a target="_self" href="../CardView/card.html?nombre=${encodeURIComponent(carta.nombre)}">
-        <img src="${carta.imagen}" alt="${carta.nombre}">
+      <a href="../CardView/card.html?nombre=${encodeURIComponent(card.name)}">
+        <img src="${card.card_images[0].image_url}" alt="${card.name}">
       </a>
-      <span class="card-name">${carta.nombre}</span>
-      <span class="card-count">${carta.cantidad}</span>
-      <button class="card-count btn-eliminar">➖</button>
-    </div>
-  `;
-
-  li.querySelector(".btn-eliminar").addEventListener("click", async () => {
-    try {
-      await eliminarCantidadCartaStock(carta);
-      console.log(`Carta "${carta.nombre}" eliminada del stock`);
-       // Volvemos a renderizar todo desde cero
-      await recargarLista();
-    } catch (err) {
-      console.error("Error eliminando en IndexedDB:", err);
-    }
+      <span class="card-name">${card.name}</span>
+      <span class="card-count">${card.cantidad}</span>
+      <button class="btn-eliminar">➖</button>
+    </div>`;
+  li.querySelector('.btn-eliminar').addEventListener('click', async () => {
+    // 1) Elimino de IndexedDB
+    await eliminarCantidadCartaStock({ id: card.id });
+    // 2) Re-cargo DB y re-mapeo
+    const refreshed = (await obtenerCartasDelStock()).map(c2 => ({
+      id: c2.id,
+      name: c2.nombre,
+      cantidad: c2.cantidad,
+      humanReadableCardType: c2.humanReadableCardType,
+      cardType: c2.cardType,
+      card_images: [{ image_url: c2.imagen }]
+    }));
+    // 3) Limpio <ul> y scroll listener
+    ul.removeEventListener('scroll', onScroll);
+    ul.textContent = '';
+    // 4) Reinicializo filtros y paginación
+    initFilterModule(refreshed, ul, makeListItem);
+    renderNextBatch();
+    ul.addEventListener('scroll', onScroll);
   });
-
   return li;
 }
 
+
 // Carga el siguiente lote de cartas
-function renderNextBatch() {
-  const batch = cartas.slice(currentIndex, currentIndex + pageSize);
-  batch.forEach(carta => ul.appendChild(makeListItem(carta)));
-  currentIndex += batch.length;
-  if (currentIndex >= cartas.length) {
-    ul.removeEventListener("scroll", onScroll);
-  }
-}
+// function renderNextBatch() {
+//   const batch = cartas.slice(currentIndex, currentIndex + pageSize);
+//   batch.forEach(carta => ul.appendChild(makeListItem(carta)));
+//   currentIndex += batch.length;
+//   if (currentIndex >= cartas.length) {
+//     ul.removeEventListener("scroll", onScroll);
+//   }
+// }
 
 // Escucha el scroll y carga más cartas si es necesario
-function onScroll() {
-  if (ul.scrollTop + ul.clientHeight >= ul.scrollHeight - threshold) {
-    renderNextBatch();
-  }
-}
+// function onScroll() {
+//   if (ul.scrollTop + ul.clientHeight >= ul.scrollHeight - threshold) {
+//     renderNextBatch();
+//   }
+// }
 
 function buscarCartaPorNombre() {
   document.getElementById('search-btn').addEventListener('click', function () {
@@ -131,21 +154,26 @@ function buscarCartaPorNombre() {
 }
 
 // Función principal: abre BD, carga cartas, y configura scroll
-async function createAndConfigureCardList() {
-  try {
-    await abrirConexionDB();
-    buscarCartaPorNombre();
-    ul = document.getElementById("lista-cartas");
-    cartas = await obtenerCartasDelStock();
-    currentIndex = 0;
+window.addEventListener('DOMContentLoaded', async () => {
+  await abrirConexionDB();
+  // si quieres seguir teniendo el buscador, inicialízalo aquí…
+  buscarCartaPorNombre();
 
-    renderNextBatch();
-    ul.addEventListener("scroll", onScroll);
+  ul = document.getElementById('lista-cartas');
+  const stored = await obtenerCartasDelStock();
+  const cardsForFilter = stored.map(c => ({
+    id: c.id,
+    name: c.nombre,
+    cantidad: c.cantidad,
+    humanReadableCardType: c.humanReadableCardType,
+    cardType: c.cardType,
+    card_images: [{ image_url: c.imagen }]
+  }));
 
-  } catch (err) {
-    console.error("Error al inicializar la lista de cartas:", err);
-  }
-}
+  // 1) Arrancamos filtros + panel
+  initFilterModule(cardsForFilter, ul, makeListItem);
+  // 2) Primera carga + scroll infinito
+  renderNextBatch();
+  ul.addEventListener('scroll', onScroll);
+});
 
-// Ejecuta cuando el DOM está listo
-window.addEventListener("DOMContentLoaded", createAndConfigureCardList);

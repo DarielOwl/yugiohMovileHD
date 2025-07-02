@@ -122,11 +122,13 @@ function buscarCartaPorNombre() {
             try {
               await agregarCartaStock({
                 id: carta.id,
-                nombre: carta.name,
-                imagen: carta.card_images[0].image_url,
-                packs: carta.card_sets,
-                precios: carta.card_prices,
-                cantidad: 0
+                nombre: carta.nombre,
+                imagen: carta.imagen,
+                packs: carta.packs,
+                precios: carta.precios,
+                cantidad: carta.cantidad,
+                humanReadableCardType: carta.humanReadableCardType,
+                cardType: carta.cardType
               });
               console.log(`Carta "${carta.name}" agregada al stock`);
             } catch (err) {
