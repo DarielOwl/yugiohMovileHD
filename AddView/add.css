@@ -22,6 +22,7 @@ ul {
 /* cuando body tenga la clase .filter-open, lo mostramos */
 body.filter-open #filter-panel {
   left: 0;
+  background-color: whitesmoke
 }
 
 /* empujamos la lista de cartas hacia la derecha mientras esté abierto */
@@ -35,11 +36,8 @@ body.filter-open .card-list {
   display: block;
   margin-bottom: 1rem;
   padding: 0.25rem 0.5rem;
-  background: none;
-  border: none;
   font-size: 1rem;
   cursor: pointer;
-
   background: rgb(0, 0, 0);
   border-radius: 1cm;
   color: white;
@@ -54,5 +52,17 @@ body.filter-open .card-list {
   font-size: 1rem;
   cursor: pointer;
   color: white;
-  border: none;
+}
+
+/* Transición suave para ambos botones */
+#filter-panel #filter-close-btn,
+#filter-panel #clear-filters-btn {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Efecto hover: fondo oscuro y texto claro */
+#filter-panel #filter-close-btn:hover,
+#filter-panel #clear-filters-btn:hover {
+  background-color: #444;
+  color: #fff;
 }
