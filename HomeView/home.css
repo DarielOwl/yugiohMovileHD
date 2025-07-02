@@ -1,134 +1,79 @@
-/* General */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: sans-serif;
-}
+/*Importar el estilo principal "/HomeView/home.css"*/
+@import url('/style.css');
 
-/* --- Encabezado de la pagina --- */
-header {
-  text-align: center;
-  padding: 10px;
-  font-weight: bold;
-}
-
-/* --- Cuerpo de la pagina ---*/
-body {
-  background-color: hsl(0, 0%, 10%);
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
-/* --- Barra de búsqueda ---*/
-.section-search {
-  background-color: rgb(71, 71, 71);
-}
-
-.nav-search {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #2d2d2d;
-  border-radius: 25px;
-  padding: 6px 12px;
-  max-width: 350px;
-  margin: 20px auto;
-}
-
-.nav-search #filter-btn,
-.nav-search #search-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.nav-search #search-input {
-  text-align: center;
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 14px;
-  padding: 10px 16px;
-  margin: 0 8px;
-  outline: none;
-}
-
-/* --- Main de la Pagina ---*/
-main {
-  flex: 1;
-}
-
-/* --- Listado de cartas --- */
-.card-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px;
-}
 
 ul {
-  overflow: auto;
-  height: 65vh;
+  height: 81.7vh;
 }
 
-.card-item {
-  background-color: white;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  padding: 8px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.card-item img {
-  width: 50px;
-  height: 70px;
-  border-radius: 8px;
-  margin-right: 10px;
-}
-
-.card-name {
-  flex: 1;
-  font-weight: 500;
-}
-
-.card-count {
-  font-weight: bold;
-  background-color: #eee;
-  padding: 5px 10px;
-  border-radius: 8px;
-}
-
-/* --- Pie de Pagina ---*/
-.footer-menu {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background-color: rgb(0, 0, 0);
-  padding: 10px 0;
-}
-
-.footer-menu a {
-  background: none;
-  border: none;
-  font-size: 22px;
-  cursor: pointer;
-  padding: 5px 15px;
-  border-radius: 10px;
+h2 {
+  color: white;
   text-decoration: none;
+  padding: 25px;
+  display: block;
+  text-align: center;
+  font-size: 23px;
 }
 
-.footer-menu a.active {
-  background-color: rgb(64, 178, 216);
+/* PANEL DE FILTROS */
+#filter-panel {
+  position: fixed;
+  top: 0; left: -200px;
+  width: 200px; height: 100vh;
+  padding: 1rem;
+  background: #fff;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  overflow-y: auto;
+  transition: left 0.3s ease;
+  z-index: 1000;
 }
 
-.footer-menu a:hover {
-  background-color: rgb(255, 255, 255);
+/* cuando body tenga la clase .filter-open, lo mostramos */
+body.filter-open #filter-panel {
+  left: 0;
+  background-color: whitesmoke
+}
+
+/* empujamos la lista de cartas hacia la derecha mientras esté abierto */
+body.filter-open .card-list {
+  margin-left: 200px;
+  transition: margin-left 0.3s ease;
+}
+
+/* estilo botón “Atrás” dentro del panel */
+#filter-panel #filter-close-btn {
+  display: block;
+  margin-bottom: 1rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  background: rgb(0, 0, 0);
+  border-radius: 1cm;
+  color: white;
+}
+
+#filter-panel #clear-filters-btn {
+  display: block;
+  margin-bottom: 1rem;
+  padding: 0.25rem 0.5rem;
+  background: rgb(0, 0, 0);
+  border-radius: 1cm;
+  font-size: 1rem;
+  cursor: pointer;
+  color: white;
+}
+
+/* Transición suave para ambos botones */
+#filter-panel #filter-close-btn,
+#filter-panel #clear-filters-btn {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Efecto hover: fondo oscuro y texto claro */
+#filter-panel #filter-close-btn:hover,
+#filter-panel #clear-filters-btn:hover {
+  background-color: #444;
+  color: #fff;
 }
 
 #mensaje-eliminado {

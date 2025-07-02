@@ -94,32 +94,22 @@ export function eliminarCantidadCartaStock(carta) {
     obtenerCarta.onsuccess = () => {
       const cartaExistente = obtenerCarta.result;
       let cartaActualizada = {};
+      // Ahora: tomas el registro completo que ya existe y solo le restas 1
       if (cartaExistente.cantidad > 1) {
-        cartaActualizada = {
-          ...carta,
-          cantidad: cartaExistente ? cartaExistente.cantidad - 1 : 1
+        const cartaActualizada = {
+          ...cartaExistente,
+          cantidad: cartaExistente.cantidad - 1
         };
-
         const accion = store.put(cartaActualizada);
-        console.log("Carta actualizada:", cartaActualizada);
-
         accion.onsuccess = () => resolve();
         accion.onerror = ev => reject(ev.target.error);
       } else {
-
-        // Corregido: se espera a que termine la eliminación
+        // (eliminar en caso de que quede a 0, igual que antes…)
         const eliminarAccion = store.delete(cartaExistente.id);
-
-        eliminarAccion.onsuccess = () => {
-          console.log(`Carta con ID ${cartaExistente.id} eliminada del stock.`);
-          resolve();
-        };
-
-        eliminarAccion.onerror = (ev) => {
-          console.error('Error al eliminar la carta:', ev.target.error);
-          reject(ev.target.error);
-        };
+        eliminarAccion.onsuccess = () => resolve();
+        eliminarAccion.onerror = ev => reject(ev.target.error);
       }
+
 
     };
 
