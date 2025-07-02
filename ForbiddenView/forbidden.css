@@ -1,6 +1,10 @@
 /*Importar el estilo principal "/HomeView/home.css"*/
 @import url('/style.css');
 
+ul {
+  height: 81.7vh;
+}
+
 h2 {
   color: white;
   text-decoration: none;
@@ -8,4 +12,65 @@ h2 {
   display: block;
   text-align: center;
   font-size: 23px;
+}
+
+/* PANEL DE FILTROS */
+#filter-panel {
+  position: fixed;
+  top: 0; left: -200px;
+  width: 200px; height: 100vh;
+  padding: 1rem;
+  background: #fff;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  overflow-y: auto;
+  transition: left 0.3s ease;
+  z-index: 1000;
+}
+
+/* cuando body tenga la clase .filter-open, lo mostramos */
+body.filter-open #filter-panel {
+  left: 0;
+  background-color: whitesmoke
+}
+
+/* empujamos la lista de cartas hacia la derecha mientras esté abierto */
+body.filter-open .card-list {
+  margin-left: 200px;
+  transition: margin-left 0.3s ease;
+}
+
+/* estilo botón “Atrás” dentro del panel */
+#filter-panel #filter-close-btn {
+  display: block;
+  margin-bottom: 1rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  background: rgb(0, 0, 0);
+  border-radius: 1cm;
+  color: white;
+}
+
+#filter-panel #clear-filters-btn {
+  display: block;
+  margin-bottom: 1rem;
+  padding: 0.25rem 0.5rem;
+  background: rgb(0, 0, 0);
+  border-radius: 1cm;
+  font-size: 1rem;
+  cursor: pointer;
+  color: white;
+}
+
+/* Transición suave para ambos botones */
+#filter-panel #filter-close-btn,
+#filter-panel #clear-filters-btn {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Efecto hover: fondo oscuro y texto claro */
+#filter-panel #filter-close-btn:hover,
+#filter-panel #clear-filters-btn:hover {
+  background-color: #444;
+  color: #fff;
 }
