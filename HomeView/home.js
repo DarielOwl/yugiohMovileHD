@@ -59,7 +59,7 @@ function makeListItem(card) {
 
     // 1) Elimino de IndexedDB
     await eliminarCantidadCartaStock({ id: card.id });
-    mostrarMensajeEliminado(`Carta "${carta.name}" eliminada del stock`);
+    mostrarMensajeEliminado(`Carta "${card.name}" eliminada del stock`);
 
     // 2) Re-cargo DB y re-mapeo
     const refreshed = (await obtenerCartasDelStock()).map(c2 => ({
