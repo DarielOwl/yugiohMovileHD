@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="home.css"> <!-- Puedes agregar tu CSS aquí -->
+    <link rel="manifest" href="../manifest.json">
     <title>Yu-Gi-Oh - Stock</title>
 </head>
 
@@ -72,6 +73,13 @@
             <ul id="lista-cartas">
                 <!-- Cada carta -->
             </ul>
+
+
+             <div id="mensaje-eliminado" role="alert">
+                Carta eliminada del stock
+            </div>
+
+
         </section>
     </main>
 
@@ -82,7 +90,7 @@
         <a id="banned-cards-btn" href="../ForbiddenView/forbidden.html">🚫</a>
     </footer>
 
-    <script type="module" src="/HomeView/home.js"></script>
+    <script type="module" src="./home.js"></script>
 </body>
 
 </html>

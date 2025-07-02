@@ -8,23 +8,27 @@ import {
   obtenerCartasDelStock
 } from '../db/db.js';
 
+
+function mostrarMensajeEliminado(texto = "Carta eliminada del stock") {
+  const mensaje = document.getElementById("mensaje-eliminado");
+  mensaje.textContent = texto;
+  mensaje.classList.add("mostrar");
+
+  setTimeout(() => {
+    mensaje.classList.remove("mostrar");
+  }, 5000); // Ocultar después de 5 segundos
+}
+
+
 let ul;
 let cartas = [];
 let currentIndex = 0;
-// const ul = document.getElementById("lista-cartas");
-// const stored = await obtenerCartasDelStock();
-// const cardsForFilter = stored.map(c => ({
-//   id: c.id,
-//   name: c.nombre,
-//   cantidad: c.cantidad,
-//   humanReadableCardType: c.humanReadableCardType,
-//   cardType: c.cardType,
-//   card_images: [{ image_url: c.imagen }]
-// }));
 
-
-// const pageSize = 20;
-// const threshold = 100;
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('../service_worker.js')
+    .then(reg => console.log('Registro del SW exitoso', reg))
+    .catch(err => console.warn('Error al tratar de registrar el SW', err))
+}
 
 // async function recargarLista() {
 //   ul.innerHTML = "";
@@ -52,8 +56,11 @@ function makeListItem(card) {
       <button class="btn-eliminar">➖</button>
     </div>`;
   li.querySelector('.btn-eliminar').addEventListener('click', async () => {
+
     // 1) Elimino de IndexedDB
     await eliminarCantidadCartaStock({ id: card.id });
+    mostrarMensajeEliminado(`Carta "${carta.name}" eliminada del stock`);
+
     // 2) Re-cargo DB y re-mapeo
     const refreshed = (await obtenerCartasDelStock()).map(c2 => ({
       id: c2.id,
@@ -73,7 +80,6 @@ function makeListItem(card) {
   });
   return li;
 }
-
 
 // Carga el siguiente lote de cartas
 // function renderNextBatch() {
@@ -137,6 +143,7 @@ function buscarCartaPorNombre() {
                 precios: carta.card_prices,
                 cantidad: 0
               });
+              mostrarMensajeEliminado(`Carta "${carta.name}" eliminada del stock`);
               console.log(`Carta "${carta.name}" agregada al stock`);
             } catch (err) {
               console.error("Error guardando en IndexedDB:", err);

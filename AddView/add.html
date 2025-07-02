@@ -21,7 +21,7 @@
     <aside id="filter-panel">
         <button id="filter-close-btn" aria-label="Cerrar filtros">Atrás</button>
         <button id="clear-filters-btn" type="button">Limpiar</button>
-        
+
         <br>
         <h3>Tipos de Cartas</h3>
         <!-- Radio buttons de categoría -->
@@ -69,7 +69,15 @@
     <main>
         <!-- Listado de cartas en stock -->
         <section class="card-list">
-            <ul id="lista-cartas"></ul>
+
+            <ul id="lista-cartas">
+                <!-- Cada carta -->
+            </ul>
+
+            <div id="mensaje-agregado" role="alert">
+                Carta agregada al stock
+            </div>
+
         </section>
     </main>
 
@@ -80,7 +88,7 @@
         <a id="banned-cards-btn" href="../ForbiddenView/forbidden.html">🚫</a>
     </footer>
 
-    <script type="module" src="/AddView/add.js"></script>
+    <script type="module" src="./add.js"></script>
 </body>
 
 </html>
